@@ -1,0 +1,17 @@
+# Cloudflare Workers configuration
+# Deploy with: npx wrangler deploy
+# Local dev with Workers: npx wrangler dev (requires worker build target)
+
+name = "my-cv-rust"
+main = "target/worker/shim.js"
+compatibility_date = "2026-02-23"
+
+# Build Rust Worker (when using workers-rs)
+# [build]
+# command = "cargo install worker-build && worker-build --release"
+# [build.upload]
+# format = "service-worker"
+
+# For Leptos + Axum SSR, you may deploy the Axum server to Workers using
+# the wasm target and leptos_axum with default-features = false, features = ["wasm"].
+# Adjust main and build as needed for your Worker entrypoint.

@@ -1,0 +1,54 @@
+[package]
+name = "my_cv_rust"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "my_cv_rust"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "my_cv_rust"
+path = "src/main.rs"
+
+[dependencies]
+# Leptos 0.8 (SSR + hydrate)
+leptos = { version = "0.8", features = ["ssr", "serde-lite"] }
+leptos_meta = { version = "0.8", features = ["ssr"] }
+leptos_router = { version = "0.8", features = ["ssr"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Cloudflare Workers (for deployment target; use feature "worker" to build for Workers)
+worker = { version = "0.7", optional = true }
+
+# Server-only: not built for wasm32 (avoids mio "unsupported wasm" when building hydrate bundle)
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+leptos_axum = "0.8"
+axum = "0.8"
+tokio = { version = "1", features = ["full"] }
+
+[features]
+default = []
+# Used by cargo-leptos when building the lib for the browser (WASM/hydration).
+hydrate = ["leptos/hydrate"]
+# Enable for Cloudflare Workers build (wasm target). For native Axum dev, use default.
+worker = ["dep:worker"]
+
+[package.metadata.leptos]
+output-name = "my_cv_rust"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+style-file = "style/main.css"
+assets-dir = "public"
+site-addr = "127.0.0.1:3000"
+reload-port = 3001
+browserquery = "defaults"
+bin-features = []
+lib-features = ["hydrate"]
+lib-default-features = false
+tailwind-input-file = "style/main.css"
+

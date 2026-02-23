@@ -1,0 +1,32 @@
+/* Tailwind v4 (cargo-leptos uses v4) */
+@import "tailwindcss";
+
+/* Mobile-first base styles — plain CSS to avoid Tailwind v4 @apply utility resolution issues */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #111827;
+    background-color: #fff;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}
+
+/* Responsive image containers */
+.img-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.img-container img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
