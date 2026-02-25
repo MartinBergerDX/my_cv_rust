@@ -3,6 +3,7 @@
 use crate::server::{submit_contact, ContactFormInput, ContactFormResult};
 use leptos::ev;
 use leptos::prelude::*;
+use tracing::log;
 
 #[component]
 pub fn ContactForm() -> impl IntoView {
@@ -15,6 +16,7 @@ pub fn ContactForm() -> impl IntoView {
     let result = submit.value();
 
     let on_submit = move |_| {
+        log::info!("Submitting contact form");
         submit.dispatch(ContactFormInput {
             name: name.get(),
             email: email.get(),
@@ -26,7 +28,10 @@ pub fn ContactForm() -> impl IntoView {
     view! {
         <section id="contact" class="max-w-xl mx-auto">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">"Get in touch"</h2>
-            <form on:submit=move |ev: ev::SubmitEvent| { ev.prevent_default(); on_submit(()); } class="space-y-4">
+            <form
+                on:submit=move |ev: ev::SubmitEvent| { ev.prevent_default(); on_submit(()); }
+                class="space-y-4"
+            >
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">"Name"</label>
                     <input
@@ -75,7 +80,8 @@ pub fn ContactForm() -> impl IntoView {
                     ></textarea>
                 </div>
                 <button
-                    type="submit"
+                    type="button"
+                    on:click=move |_| on_submit(())
                     disabled=move || pending.get()
                     class="w-full rounded-md bg-gray-900 px-4 py-2 text-white font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >

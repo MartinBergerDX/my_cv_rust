@@ -30,6 +30,18 @@ worker = { version = "0.7", optional = true }
 leptos_axum = "0.8"
 axum = "0.8"
 tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+secrecy = { version = "0.8", features = ["serde"] }
+config = { version = "0.14", default-features = false, features = ["yaml"] }
+serde-aux = "4"
+
+[dev-dependencies]
+wiremock = "0.6"
+fake = { version = "4", features = ["derive"] }
+claims = "0.8"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 
 [features]
 default = []

@@ -1,0 +1,7 @@
+# Local development overrides. Use a mock or test key; real sends via Resend in production.
+# Optional: set APP_EMAIL_CLIENT__BASE_URL to a WireMock URL for integration tests.
+
+email_client:
+  base_url: "https://api.resend.com"
+  sender_email: "onboarding@resend.dev"
+  # In local, use a test key or leave placeholder; override with APP_EMAIL_CLIENT__AUTHORIZATION_TOKEN

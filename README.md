@@ -25,7 +25,11 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
    cargo run
    ```
 
-   App is served at `http://127.0.0.1:3000`.
+   App is served at `http://127.0.0.1:3000`. Configuration is loaded from `configuration/base.yaml` and `configuration/local.yaml` (default). To use production config:
+
+   ```bash
+   APP_ENVIRONMENT=production cargo run
+   ```
 
 ## Project layout
 

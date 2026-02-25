@@ -1,0 +1,6 @@
+# Production overrides. Set APP_EMAIL_CLIENT__AUTHORIZATION_TOKEN and sender_email via env in production.
+# Example: APP_EMAIL_CLIENT__AUTHORIZATION_TOKEN=re_xxx APP_EMAIL_CLIENT__SENDER_EMAIL=you@yourdomain.com
+
+email_client:
+  base_url: "https://api.resend.com"
+  # sender_email and authorization_token should be set via APP_EMAIL_CLIENT__* env vars in production

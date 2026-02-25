@@ -5,6 +5,11 @@ mod data;
 mod pages;
 mod server;
 
+#[cfg(not(target_arch = "wasm32"))]
+pub mod configuration;
+#[cfg(not(target_arch = "wasm32"))]
+pub mod email_client;
+
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
 use leptos_meta::provide_meta_context;

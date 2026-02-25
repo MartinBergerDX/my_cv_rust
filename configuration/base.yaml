@@ -1,0 +1,10 @@
+# Base configuration. Override per environment (local.yaml / production.yaml) and via APP_* env vars.
+# Set your Resend API key: APP_EMAIL_CLIENT__AUTHORIZATION_TOKEN=re_xxx
+
+contact_recipient_email: "martin.berger.developer@gmail.com"
+
+email_client:
+  base_url: "https://api.resend.com"
+  sender_email: "onboarding@resend.dev"
+  authorization_token: "replace-with-your-resend-api-key"
+  timeout_milliseconds: 10000
