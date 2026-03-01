@@ -1,4 +1,4 @@
-use crate::components::{ContactForm, Navbar, ProjectGrid};
+use crate::components::{ContactForm, ProjectGrid};
 use crate::data::{project_entries, resume_data};
 use leptos::prelude::{ElementChild, *};
 
@@ -8,32 +8,20 @@ pub fn HomePage() -> impl IntoView {
     let projects = project_entries();
 
     view! {
-        <Navbar />
-        <main class="pt-14 pb-24 md:pb-12 max-w-6xl mx-auto px-4">
             <section class="py-12 md:py-16">
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900">{resume.name.clone()}</h1>
                 <p class="text-xl text-gray-600 mt-1">{resume.title.clone()}</p>
-                {resume.tagline.as_ref().map(|t| view! { <p class="text-gray-500 mt-1">{t.clone()}</p> })}
-                {(resume.date_of_birth.is_some() || !resume.languages.is_empty()).then(|| view! {
-                    <div class="mt-4 text-sm text-gray-600">
-                        {resume.date_of_birth.as_ref().map(|d| view! { <p>"Date of birth: " {d.clone()}</p> })}
-                        {(!resume.languages.is_empty()).then(|| {
-                            let lang_text = resume.languages.iter()
-                                .map(|l| format!("{} ({})", l.language, l.level))
-                                .collect::<Vec<_>>()
-                                .join(", ");
-                            view! { <p>"Languages: " {lang_text}</p> }
-                        })}
-                    </div>
-                })}
+                <p class="text-gray-500 mt-1">{resume.tagline.clone()}</p>
+                <div class="mt-4 text-sm text-gray-600">
+                    <p>"Date of birth: "{resume.date_of_birth.clone()}</p>
+                    <p>"Languages: "{resume.languages.iter().map(|l| format!("{} ({})", l.language, l.level)).collect::<Vec<_>>().join(", ")}</p>
+                </div>
             </section>
 
-            {resume.summary.as_ref().map(|s| view! {
-                <section class="py-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-2">"About"</h2>
-                    <p class="text-gray-600">{s.clone()}</p>
-                </section>
-            })}
+            <section class="py-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-2">"About"</h2>
+                <p class="text-gray-600">{resume.summary.clone()}</p>
+            </section>
 
             <section id="work" class="py-8">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">"Work"</h2>
@@ -42,10 +30,10 @@ pub fn HomePage() -> impl IntoView {
                         <li class="border-l-2 border-gray-200 pl-4">
                             <h3 class="font-semibold text-gray-900">{w.role.clone()}</h3>
                             <p class="text-gray-600">{w.company.clone()}
-                                {w.location.as_ref().map(|l| view! { <span class="text-gray-400">" · " {l.clone()}</span> })}
+                                <span class="text-gray-400">{if w.location.is_empty() { "".to_string() } else { format!(" · {}", w.location) }}</span>
                             </p>
                             <p class="text-sm text-gray-500">{w.start.clone()}" – "{w.end.clone()}</p>
-                            {w.description.as_ref().map(|d| view! { <p class="mt-1 text-gray-600">{d.clone()}</p> })}
+                            <p class="mt-1 text-gray-600">{w.description.clone()}</p>
                             <ul class="mt-2 list-disc list-inside text-sm text-gray-600">
                                 {w.highlights.iter().map(|h| view! { <li>{h.clone()}</li> }).collect_view()}
                             </ul>
@@ -87,6 +75,5 @@ pub fn HomePage() -> impl IntoView {
             <section class="py-12">
                 <ContactForm />
             </section>
-        </main>
     }
 }

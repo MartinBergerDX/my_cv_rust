@@ -19,6 +19,7 @@ pub struct ContactFormResult {
     pub message: String,
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 fn escape_html(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
@@ -26,6 +27,7 @@ fn escape_html(s: &str) -> String {
         .replace('"', "&quot;")
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 fn contact_email_subject(input: &ContactFormInput) -> String {
     input
         .subject
@@ -35,6 +37,7 @@ fn contact_email_subject(input: &ContactFormInput) -> String {
         .unwrap_or_else(|| "Contact form message".to_string())
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 fn contact_email_html(input: &ContactFormInput) -> String {
     let subject = contact_email_subject(input);
     format!(
@@ -49,6 +52,7 @@ fn contact_email_html(input: &ContactFormInput) -> String {
     )
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 fn contact_email_text(input: &ContactFormInput) -> String {
     let subject = contact_email_subject(input);
     format!(

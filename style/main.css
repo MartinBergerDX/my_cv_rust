@@ -1,5 +1,10 @@
-/* Tailwind v4 (cargo-leptos uses v4) */
+/* Tailwind v4 — CSS-first config (no tailwind.config.js) */
 @import "tailwindcss";
+
+@theme {
+  /* Custom spacing for mobile safe-area; use e.g. pb-thumb-zone */
+  --spacing-thumb-zone: env(safe-area-inset-bottom, 0px);
+}
 
 /* Mobile-first base styles — plain CSS to avoid Tailwind v4 @apply utility resolution issues */
 @layer base {
@@ -29,4 +34,39 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Mobile nav */
+.nav-mobile-ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 4rem;
+  padding: 0 0.5rem;
+}
+.nav-mobile-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  color: #4b5563;
+}
+.nav-mobile-link:hover {
+  color: #111827;
+}
+.nav-mobile-link[aria-current="page"] {
+  color: #111827;
+}
+/* Single element per link so hydration has one child (avoids marker node mismatch) */
+.nav-mobile-link-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  font-size: 0.75rem;
+}
+.nav-mobile-link-inner::before {
+  content: attr(data-icon);
+  font-size: 1.125rem;
+  line-height: 1;
 }

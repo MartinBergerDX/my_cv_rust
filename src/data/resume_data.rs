@@ -6,11 +6,11 @@ use serde::{Deserialize, Serialize};
 pub struct ResumeData {
     pub name: String,
     pub title: String,
-    pub tagline: Option<String>,
-    /// Date of birth (e.g. "30. 03 1984.")
-    pub date_of_birth: Option<String>,
+    pub tagline: String,
+    /// Date of birth (e.g. "30. 03 1984."). Use "" if not provided.
+    pub date_of_birth: String,
     pub contact: ContactInfo,
-    pub summary: Option<String>,
+    pub summary: String,
     pub work_history: Vec<WorkEntry>,
     pub skills: Skills,
     pub education: Vec<EducationEntry>,
@@ -20,21 +20,21 @@ pub struct ResumeData {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ContactInfo {
     pub email: String,
-    pub phone: Option<String>,
-    pub location: Option<String>,
-    pub website: Option<String>,
-    pub linkedin: Option<String>,
-    pub github: Option<String>,
+    pub phone: String,
+    pub location: String,
+    pub website: String,
+    pub linkedin: String,
+    pub github: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct WorkEntry {
     pub role: String,
     pub company: String,
-    pub location: Option<String>,
+    pub location: String,
     pub start: String,
     pub end: String,
-    pub description: Option<String>,
+    pub description: String,
     pub highlights: Vec<String>,
 }
 
@@ -49,9 +49,9 @@ pub struct Skills {
 pub struct EducationEntry {
     pub degree: String,
     pub institution: String,
-    pub location: Option<String>,
+    pub location: String,
     pub year: String,
-    pub details: Option<String>,
+    pub details: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -65,30 +65,25 @@ pub fn resume_data() -> ResumeData {
     ResumeData {
         name: "Martin Berger".into(),
         title: "Software Developer".into(),
-        tagline: Some(
-            "Mobile application development · Flutter & iOS · Game and embedded experience".into(),
-        ),
-        date_of_birth: Some("30. 03 1984.".into()),
+        tagline: "Mobile application development · Flutter & iOS · Game and embedded experience".into(),
+        date_of_birth: "30. 03 1984.".into(),
         contact: ContactInfo {
             email: "martin.berger.developer@gmail.com".into(),
-            phone: None,
-            location: None,
-            website: None,
-            linkedin: Some("https://linkedin.com/in/martinbergerdeveloper".into()),
-            github: None,
+            phone: String::new(),
+            location: String::new(),
+            website: String::new(),
+            linkedin: "https://linkedin.com/in/martinbergerdeveloper".into(),
+            github: String::new(),
         },
-        summary: Some(
-            "Mobile and embedded systems engineer with 10+ years shipping production applications. Experience spanning iOS/Android development, game engines, and low-level embedded programming. Specializes in complex integrations and performance-critical systems that require deep technical problem-solving."
-                .into(),
-        ),
+        summary: "Mobile and embedded systems engineer with 10+ years shipping production applications. Experience spanning iOS/Android development, game engines, and low-level embedded programming. Specializes in complex integrations and performance-critical systems that require deep technical problem-solving.".into(),
         work_history: vec![
             WorkEntry {
                 role: "Flutter Developer".into(),
                 company: "ASAP Express Ltd".into(),
-                location: Some("UK-based".into()),
+                location: "UK-based".into(),
                 start: "10.2024".into(),
                 end: "Present".into(),
-                description: Some("UK-based delivery company".into()),
+                description: "UK-based delivery company".into(),
                 highlights: vec![
                     "Built complete mobile application from scratch using Flutter and Riverpod state management for UK-based delivery company".into(),
                     "Designed and implemented full onboarding flow with multi-step screens including work preferences, vehicle information, entity type selection, and business details".into(),
@@ -112,10 +107,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "Flutter Developer".into(),
                 company: "Concord Health".into(),
-                location: Some("USA".into()),
+                location: "USA".into(),
                 start: "2023".into(),
                 end: "2024".into(),
-                description: Some("Health care app".into()),
+                description: "Health care app".into(),
                 highlights: vec![
                     "Initial architecture setup, GraphQL network client, Dio Rest client, getIt, go_router, Provider, Firebase".into(),
                     "Built custom graphic components like animated linear and circular rulers using Custom Painter".into(),
@@ -140,10 +135,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "Lead Flutter Developer".into(),
                 company: "Seclo".into(),
-                location: Some("Netherlands".into()),
+                location: "Netherlands".into(),
                 start: "2022".into(),
                 end: "2023".into(),
-                description: Some("Netherlands second hand store".into()),
+                description: "Netherlands second hand store".into(),
                 highlights: vec![
                     "Team Size: Led a team of 2-4 flutter developers, eight developers in total".into(),
                     "Architecture: Established and implemented the MVVM pattern for improved code organization and maintainability".into(),
@@ -166,10 +161,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "Flutter developer".into(),
                 company: "Padrino".into(),
-                location: None,
+                location: "Serbia".into(),
                 start: "2022".into(),
                 end: "2022".into(),
-                description: Some("Food Delivery Mobile App".into()),
+                description: "Food Delivery Mobile App".into(),
                 highlights: vec![
                     "Architected the application using Bloc architecture, ensuring separation of concerns and efficient state management".into(),
                     "Conducted research on state management solutions like Riverpod and determined that a custom Store-based architecture would be the most suitable for the project".into(),
@@ -183,10 +178,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "Senior iOS Engineer".into(),
                 company: "Starbucks (EMEA – East Europe, Middle East, Africa)".into(),
-                location: None,
+                location: "EMEA".into(),
                 start: "2022".into(),
                 end: "2022 (6 months)".into(),
-                description: None,
+                description: "Starbucks (EMEA – East Europe, Middle East, Africa)".into(),
                 highlights: vec![
                     "Contributed to a highly sophisticated codebase at Starbucks, leveraging my understanding of design patterns to tackle complex challenges".into(),
                     "Responsible for bug fixes and enhancements in the iOS app, ensuring a seamless experience for Starbucks customers".into(),
@@ -201,10 +196,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "iOS Developer".into(),
                 company: "Cozily".into(),
-                location: None,
+                location: "Italy".into(),
                 start: "2021".into(),
                 end: "2021".into(),
-                description: Some("HealthTech app for Italian market".into()),
+                description: "HealthTech app for Italian market".into(),
                 highlights: vec![
                     "Added voice messages to existing message system using Twillio".into(),
                     "Stored voice messages in Caches directory and added playback controls".into(),
@@ -218,10 +213,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "iOS Developer".into(),
                 company: "Toogether".into(),
-                location: Some("Netherlands".into()),
+                location: "Netherlands".into(),
                 start: "2021".into(),
                 end: "2022".into(),
-                description: Some("Dutch car ride sharing and bicycle group ride social media apps".into()),
+                description: "Dutch car ride sharing and bicycle group ride social media apps".into(),
                 highlights: vec![
                     "Added loading screen with animated loading bar to both apps".into(),
                     "Updated code signing".into(),
@@ -249,10 +244,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "iOS Developer".into(),
                 company: "Doctor Care Anywhere".into(),
-                location: None,
+                location: "UK".into(),
                 start: "2020".into(),
                 end: "2020".into(),
-                description: Some("HealthTech".into()),
+                description: "HealthTech".into(),
                 highlights: vec![
                     "Brought in as experienced iOS developer to organize refactoring of huge code base with additional feature development".into(),
                     "Refactored massive singleton service classes, splitting them into smaller data providers using design patterns".into(),
@@ -267,10 +262,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "iOS and Android Developer".into(),
                 company: "M&I Systems".into(),
-                location: None,
+                location: "Serbia".into(),
                 start: "10.2018".into(),
                 end: "Present".into(),
-                description: Some("Stock trading and field management apps".into()),
+                description: "Stock trading and field management apps".into(),
                 highlights: vec![
                     "Maintaining iOS and Android apps for stock trading with socket messages, graphs, live news updates and complex ticker screens".into(),
                     "Communicated with clients on weekly basis for requirements gathering".into(),
@@ -288,10 +283,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "Lead iOS Developer".into(),
                 company: "Playerhunter".into(),
-                location: None,
+                location: "Serbia".into(),
                 start: "2017".into(),
                 end: "04.2018".into(),
-                description: Some("Sports-centric social network (App Store)".into()),
+                description: "Sports-centric social network (App Store)".into(),
                 highlights: vec![
                     "Spearheaded the development of a sports-centric social network platform, resembling LinkedIn".into(),
                     "Successfully launched the application on the App Store".into(),
@@ -306,10 +301,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "iOS Developer".into(),
                 company: "codecentric".into(),
-                location: None,
+                location: "Serbia".into(),
                 start: "2015".into(),
                 end: "2016".into(),
-                description: Some("Personal security app; insurance apps (22 versions)".into()),
+                description: "Personal security app; insurance apps (22 versions)".into(),
                 highlights: vec![
                     "Co-developed personal security application for women for German market".into(),
                     "Developed file management features".into(),
@@ -326,10 +321,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "Freelance iOS Developer".into(),
                 company: "CityZoom".into(),
-                location: None,
+                location: "Serbia".into(),
                 start: "2015".into(),
                 end: "2015".into(),
-                description: Some("Restaurant, spa and sport center recommendations app for navigating venues in cities. App is no longer on App Store.".into()),
+                description: "Restaurant, spa and sport center recommendations app for navigating venues in cities. App is no longer on App Store.".into(),
                 highlights: vec![
                     "Built the app from scratch using native iOS development".into(),
                     "Developed all screens and custom UI elements".into(),
@@ -343,10 +338,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "Engine Developer".into(),
                 company: "Eipix".into(),
-                location: None,
+                location: "Serbia".into(),
                 start: "2013".into(),
                 end: "2014".into(),
-                description: Some("HOPA game engine development and maintenance. Tech: Objective-C, C, C++, Java, in-house custom scripting language".into()),
+                description: "HOPA game engine development and maintenance. Tech: Objective-C, C, C++, Java, in-house custom scripting language".into(),
                 highlights: vec![
                     "Worked on C++ game engine with monolithic classes and interleaved logic for iOS, Android, MacOS and Windows".into(),
                     "Served as focal point of consultation for developers on Android, Windows, and Free2Play team".into(),
@@ -362,10 +357,10 @@ pub fn resume_data() -> ResumeData {
             WorkEntry {
                 role: "Software developer".into(),
                 company: "Execom".into(),
-                location: Some("Novi Sad, Serbia".into()),
+                location: "Novi Sad, Serbia".into(),
                 start: "2012".into(),
                 end: "2013".into(),
-                description: Some("Mobile utility/configuration; stadium seats; printer installer".into()),
+                description: "Mobile utility/configuration; stadium seats; printer installer".into(),
                 highlights: vec![
                     "Developed app to configure thermic sensor installed in warehouses".into(),
                     "Implemented configuration for data sampling intervals".into(),
@@ -399,9 +394,9 @@ pub fn resume_data() -> ResumeData {
         education: vec![EducationEntry {
             degree: "Informatics".into(),
             institution: "Higher School for Business Studies".into(),
-            location: None,
+            location: "Serbia".into(),
             year: "2002 - 2005".into(),
-            details: Some("Informatics Department".into()),
+            details: "Informatics Department".into(),
         }],
         languages: vec![
             LanguageEntry {

@@ -1,5 +1,7 @@
 #![allow(non_snake_case)]
+#![recursion_limit = "256"]
 
+pub mod app;
 mod components;
 mod data;
 mod pages;
@@ -10,55 +12,13 @@ pub mod configuration;
 #[cfg(not(target_arch = "wasm32"))]
 pub mod email_client;
 
-use leptos::config::LeptosOptions;
-use leptos::prelude::*;
-use leptos_meta::provide_meta_context;
-use leptos_router::components::{Route, Router, Routes};
-use leptos_router::path;
-use pages::{BlogListPage, BlogPostPage, HomePage};
+pub use app::{shell, App};
 
-/// Document shell for SSR: HTML structure. Used by Axum fallback handler.
-/// Stylesheet is in the shell so we don't need leptos_meta injection (avoids </head> panic).
-pub fn shell(_options: LeptosOptions) -> impl IntoView {
-    view! {
-        <html>
-            <head>
-                <meta charset="utf-8"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                <link rel="stylesheet" href="/pkg/my_cv_rust.css"/>
-            </head>
-            <body></body>
-        </html>
-    }
-}
+#[cfg(feature = "hydrate")]
+#[wasm_bindgen::prelude::wasm_bindgen]
+pub fn hydrate() {
+    use app::App;
 
-/// Full document root used by leptos_routes so every SSR response includes head + stylesheet.
-#[component]
-pub fn Root() -> impl IntoView {
-    view! {
-        <html>
-            <head>
-                <meta charset="utf-8"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                <link rel="stylesheet" href="/pkg/my_cv_rust.css"/>
-            </head>
-            <body>
-                <App/>
-            </body>
-        </html>
-    }
-}
-
-#[component]
-pub fn App() -> impl IntoView {
-    provide_meta_context();
-    view! {
-        <Router>
-            <Routes fallback=|| view! { <p class="text-gray-600">"Not found."</p> }>
-                <Route path=path!("/") view=HomePage />
-                <Route path=path!("/blog") view=BlogListPage />
-                <Route path=path!("/blog/:id") view=BlogPostPage />
-            </Routes>
-        </Router>
-    }
+    console_error_panic_hook::set_once();
+    leptos::mount::hydrate_body(App);
 }

@@ -11,13 +11,16 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
 
 ## Run locally
 
-1. **Build Tailwind CSS** (mobile-first, from `style/main.css`):
+1. **Build client assets** (WASM, JS, CSS) so the app can hydrate and the contact form works:
 
    ```bash
-   npx tailwindcss -i style/main.css -o style/output.css
+   cargo leptos build
+   cp target/tmp/tailwind.css target/site/pkg/my_cv_rust.css
    ```
 
-   Or use [cargo-leptos](https://github.com/leptos-rs/cargo-leptos) with the project’s `[package.metadata.leptos]` (e.g. `cargo leptos watch`), which can run Tailwind for you.
+   To use a specific Tailwind version (e.g. avoid the “newer version available” notice), set `LEPTOS_TAILWIND_VERSION=v4.2.1` (or the version you want) before running `cargo leptos build`.
+
+   This writes to `target/site/pkg/`. The copy step replaces the raw CSS with cargo-leptos’s Tailwind output so the browser doesn’t request `tailwindcss` (which would 404) and the button/styles work correctly. The server serves `my_cv_rust.wasm` for requests to `my_cv_rust_bg.wasm`.
 
 2. **Run the server:**
 
@@ -25,11 +28,13 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
    cargo run
    ```
 
-   App is served at `http://127.0.0.1:3000`. Configuration is loaded from `configuration/base.yaml` and `configuration/local.yaml` (default). To use production config:
+   App is served at `http://127.0.0.1:3000`. Configuration is loaded from `configuration/base.yaml` and `configuration/local.yaml` (default). For production config:
 
    ```bash
    APP_ENVIRONMENT=production cargo run
    ```
+
+   **If the “Send message” button does nothing:** ensure you ran step 1 (including the `cp` so `/pkg/my_cv_rust.css` is the compiled Tailwind). Without that, the tailwindcss 404 can break layout and the button may not receive styles or behave correctly.
 
 ## Project layout
 

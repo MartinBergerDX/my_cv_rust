@@ -3,7 +3,6 @@
 use crate::server::{submit_contact, ContactFormInput, ContactFormResult};
 use leptos::ev;
 use leptos::prelude::*;
-use tracing::log;
 
 #[component]
 pub fn ContactForm() -> impl IntoView {
@@ -16,7 +15,6 @@ pub fn ContactForm() -> impl IntoView {
     let result = submit.value();
 
     let on_submit = move |_| {
-        log::info!("Submitting contact form");
         submit.dispatch(ContactFormInput {
             name: name.get(),
             email: email.get(),
