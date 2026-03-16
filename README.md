@@ -16,11 +16,12 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
    ```bash
    cargo leptos build
    cp target/tmp/tailwind.css target/site/pkg/my_cv_rust.css
+   cp target/site/pkg/my_cv_rust.wasm target/site/pkg/my_cv_rust_bg.wasm
    ```
 
-   To use a specific Tailwind version (e.g. avoid the “newer version available” notice), set `LEPTOS_TAILWIND_VERSION=v4.2.1` (or the version you want) before running `cargo leptos build`.
+   cargo-leptos runs Tailwind and writes to `target/tmp/tailwind.css`; copy it to `target/site/pkg/my_cv_rust.css` so the app serves it. Copy the WASM so `/pkg/my_cv_rust_bg.wasm` is available. **Release build and run:** `./build-release.sh`.
 
-   This writes to `target/site/pkg/`. The copy step replaces the raw CSS with cargo-leptos’s Tailwind output so the browser doesn’t request `tailwindcss` (which would 404) and the button/styles work correctly. The server serves `my_cv_rust.wasm` for requests to `my_cv_rust_bg.wasm`.
+   (Optional) To pin a Tailwind version, set `LEPTOS_TAILWIND_VERSION` before `cargo leptos build`.
 
 2. **Run the server:**
 
@@ -34,7 +35,7 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
    APP_ENVIRONMENT=production cargo run
    ```
 
-   **If the “Send message” button does nothing:** ensure you ran step 1 (including the `cp` so `/pkg/my_cv_rust.css` is the compiled Tailwind). Without that, the tailwindcss 404 can break layout and the button may not receive styles or behave correctly.
+   **If the “Send message” button does nothing:** ensure you ran step 1 (including the CSS and WASM copies). Missing CSS can break layout and the button.
 
 ## Project layout
 
@@ -43,7 +44,7 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
 - `src/components/` — Navbar (desktop horizontal / mobile bottom “thumb zone”), ProjectGrid, ContactForm
 - `src/data/` — `ResumeData`, `project_entries()`, `blog_posts()` (SSG-style)
 - `src/server/` — `submit_contact` server function (mock; ready for email API)
-- `style/main.css` — Tailwind entry (mobile-first)
+- `style/main.css` — Tailwind v4 entry + custom styles
 - `posts/` — Future blog content (compile-time / SSG)
 - `public/` — Static assets (e.g. placeholder.svg for project grid)
 - `wrangler.toml` — Cloudflare Workers config (compatibility_date 2026-02-23)

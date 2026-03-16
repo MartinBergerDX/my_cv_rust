@@ -18,7 +18,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <HydrationScripts options=options.clone() />
-                <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+                <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg"/>
                 <MetaTags/>
             </head>
             <body>

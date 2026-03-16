@@ -39,6 +39,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 secrecy = { version = "0.8", features = ["serde"] }
 config = { version = "0.14", default-features = false, features = ["yaml"] }
+dotenvy = "0.15"
 serde-aux = "4"
 
 # Smaller WASM in release (matches start-axum).
