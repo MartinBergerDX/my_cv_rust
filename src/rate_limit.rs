@@ -2,7 +2,7 @@
 use std::{
     collections::HashMap,
     net::IpAddr,
-    sync::{Mutex, OnceLock},
+    sync::Mutex,
     time::{Duration, Instant},
 };
 
@@ -51,13 +51,7 @@ impl IpRateLimiter {
 }
 
 #[cfg(feature = "ssr")]
-static CONTACT_RATE_LIMITER: OnceLock<IpRateLimiter> = OnceLock::new();
-
-/// Global limiter for the contact form.
-///
-/// Default: 3 requests per 10 minutes per IP.
-#[cfg(feature = "ssr")]
-pub fn contact_rate_limiter() -> &'static IpRateLimiter {
-    CONTACT_RATE_LIMITER.get_or_init(|| IpRateLimiter::new(Duration::from_secs(10 * 60), 3))
+pub fn default_contact_rate_limiter() -> IpRateLimiter {
+    IpRateLimiter::new(Duration::from_secs(10 * 60), 3)
 }
 

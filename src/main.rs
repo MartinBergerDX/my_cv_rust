@@ -1,8 +1,10 @@
 use axum::Router;
 use leptos::config::get_configuration as get_leptos_configuration;
 use leptos_axum::{generate_route_list, LeptosRoutes};
-use my_cv_rust::{configuration, email_client, shell, App};
+use leptos::prelude::provide_context;
+use my_cv_rust::{configuration, email_client, rate_limit, shell, state::AppState, App};
 use std::net::SocketAddr;
+use std::sync::Arc;
 use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
@@ -33,18 +35,31 @@ async fn main() {
         app_conf.email_client.authorization_token.clone(),
         app_conf.email_client.timeout(),
     );
-    email_client::init_email_client(client);
+    let app_state = AppState {
+        leptos_options: leptos_options.clone(),
+        settings: app_conf,
+        email_client: Arc::new(client),
+        contact_rate_limiter: Arc::new(rate_limit::default_contact_rate_limiter()),
+    };
 
     let routes = generate_route_list(App);
-    let leptos_options_for_shell = leptos_options.clone();
     let app = Router::new()
-        .leptos_routes(
-            &leptos_options,
+        .leptos_routes_with_context(
+            &app_state.leptos_options,
             routes,
-            move || shell(leptos_options_for_shell.clone()),
+            {
+                let app_state = app_state.clone();
+                move || provide_context(app_state.clone())
+            },
+            {
+                let leptos_options_for_shell = app_state.leptos_options.clone();
+                move || shell(leptos_options_for_shell.clone())
+            },
         )
         .fallback(leptos_axum::file_and_error_handler(shell))
-        .with_state(leptos_options);
+        // Provide LeptosOptions as Axum router state value.
+        // (Leptos server functions get AppState via context, not Axum State.)
+        .with_state(app_state.leptos_options.clone());
 
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     let url = format!("http://{addr}");

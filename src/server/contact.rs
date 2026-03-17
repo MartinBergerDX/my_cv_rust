@@ -1,9 +1,9 @@
 //! Contact form server function. Sends email via Resend (configured in configuration/*.yaml and APP_* env).
 
 #[cfg(feature = "ssr")]
-use crate::{configuration, email_client};
+use crate::state::AppState;
 #[cfg(feature = "ssr")]
-use crate::rate_limit;
+use leptos::prelude::expect_context;
 use leptos::prelude::ServerFnError;
 use serde::{Deserialize, Serialize};
 
@@ -99,9 +99,11 @@ pub async fn submit_contact(
         use leptos_axum::extract;
         use std::net::SocketAddr;
 
+        let app_state = expect_context::<AppState>();
+
         let ConnectInfo(addr): ConnectInfo<SocketAddr> = extract().await?;
         let ip = addr.ip();
-        if !rate_limit::contact_rate_limiter().allow(ip) {
+        if !app_state.contact_rate_limiter.allow(ip) {
             tracing::warn!(client_ip = %ip, "submit_contact: rate limited");
             return Ok(ContactFormResult {
                 success: false,
@@ -110,18 +112,14 @@ pub async fn submit_contact(
         }
 
         tracing::info!("submit_contact: validation passed, loading config and sending email");
-        let conf = configuration::get_configuration().map_err(|e| -> ServerFnError {
-            tracing::error!("submit_contact: configuration error: {}", e);
-            ServerFnError::ServerError(format!("Configuration error: {}", e))
-        })?;
-        let recipient = conf.contact_recipient_email.as_str();
+        let recipient = app_state.settings.contact_recipient_email.as_str();
         tracing::info!(recipient = %recipient, "submit_contact: sending email via client");
-        let client = email_client::get_email_client();
         let subject = format!("[CV Contact] {}", contact_email_subject(&input));
         let html = contact_email_html(&input);
         let text = contact_email_text(&input);
 
-        if let Err(e) = client
+        if let Err(e) = app_state
+            .email_client
             .send_email(recipient, &subject, &html, &text, Some(&input.email))
             .await
         {

@@ -1,22 +1,8 @@
 //! Email client for sending contact form messages. Resend-shaped API; base URL configurable for tests.
 //! Only compiled for the server (`feature = "ssr"`).
 
-use std::sync::OnceLock;
 use reqwest::Client;
 use secrecy::{ExposeSecret, Secret};
-
-/// Global client set at startup from configuration. Used by server functions.
-static EMAIL_CLIENT: OnceLock<EmailClient> = OnceLock::new();
-
-/// Initialize the global email client. Call once from main after loading configuration.
-pub fn init_email_client(client: EmailClient) {
-    let _ = EMAIL_CLIENT.set(client);
-}
-
-/// Get the global email client. Panics if init_email_client was not called.
-pub fn get_email_client() -> &'static EmailClient {
-    EMAIL_CLIENT.get().expect("email client not initialized")
-}
 
 pub struct EmailClient {
     http_client: Client,

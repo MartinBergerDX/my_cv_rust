@@ -13,6 +13,8 @@ pub mod configuration;
 pub mod email_client;
 #[cfg(feature = "ssr")]
 pub mod rate_limit;
+#[cfg(feature = "ssr")]
+pub mod state;
 
 pub use app::{shell, App};
 
