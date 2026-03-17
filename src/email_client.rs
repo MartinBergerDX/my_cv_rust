@@ -1,5 +1,5 @@
 //! Email client for sending contact form messages. Resend-shaped API; base URL configurable for tests.
-//! Only compiled for server (not wasm32).
+//! Only compiled for the server (`feature = "ssr"`).
 
 use std::sync::OnceLock;
 use reqwest::Client;

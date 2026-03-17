@@ -7,10 +7,12 @@ mod data;
 mod pages;
 mod server;
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(feature = "ssr")]
 pub mod configuration;
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(feature = "ssr")]
 pub mod email_client;
+#[cfg(feature = "ssr")]
+pub mod rate_limit;
 
 pub use app::{shell, App};
 

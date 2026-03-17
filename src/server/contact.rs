@@ -1,7 +1,9 @@
 //! Contact form server function. Sends email via Resend (configured in configuration/*.yaml and APP_* env).
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(feature = "ssr")]
 use crate::{configuration, email_client};
+#[cfg(feature = "ssr")]
+use crate::rate_limit;
 use leptos::prelude::ServerFnError;
 use serde::{Deserialize, Serialize};
 
@@ -19,7 +21,7 @@ pub struct ContactFormResult {
     pub message: String,
 }
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(feature = "ssr")]
 fn escape_html(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
@@ -27,7 +29,7 @@ fn escape_html(s: &str) -> String {
         .replace('"', "&quot;")
 }
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(feature = "ssr")]
 fn contact_email_subject(input: &ContactFormInput) -> String {
     input
         .subject
@@ -37,7 +39,7 @@ fn contact_email_subject(input: &ContactFormInput) -> String {
         .unwrap_or_else(|| "Contact form message".to_string())
 }
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(feature = "ssr")]
 fn contact_email_html(input: &ContactFormInput) -> String {
     let subject = contact_email_subject(input);
     format!(
@@ -52,7 +54,7 @@ fn contact_email_html(input: &ContactFormInput) -> String {
     )
 }
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(feature = "ssr")]
 fn contact_email_text(input: &ContactFormInput) -> String {
     let subject = contact_email_subject(input);
     format!(
@@ -90,8 +92,23 @@ pub async fn submit_contact(
         });
     }
 
-    #[cfg(not(target_arch = "wasm32"))]
+    #[cfg(feature = "ssr")]
     {
+        // Rate limit per client IP (in-memory, per-process).
+        use axum::extract::ConnectInfo;
+        use leptos_axum::extract;
+        use std::net::SocketAddr;
+
+        let ConnectInfo(addr): ConnectInfo<SocketAddr> = extract().await?;
+        let ip = addr.ip();
+        if !rate_limit::contact_rate_limiter().allow(ip) {
+            tracing::warn!(client_ip = %ip, "submit_contact: rate limited");
+            return Ok(ContactFormResult {
+                success: false,
+                message: "Too many messages. Please try again in a few minutes.".into(),
+            });
+        }
+
         tracing::info!("submit_contact: validation passed, loading config and sending email");
         let conf = configuration::get_configuration().map_err(|e| -> ServerFnError {
             tracing::error!("submit_contact: configuration error: {}", e);
@@ -114,7 +131,7 @@ pub async fn submit_contact(
         tracing::info!("submit_contact: email sent successfully");
     }
 
-    #[cfg(target_arch = "wasm32")]
+    #[cfg(not(feature = "ssr"))]
     let _ = input;
 
     Ok(ContactFormResult {

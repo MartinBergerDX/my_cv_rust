@@ -1,4 +1,4 @@
-//! Application configuration (server-only). Loads from configuration/*.yaml and APP_* env vars.
+//! Application configuration (server-only, `feature = "ssr"`). Loads from configuration/*.yaml and APP_* env vars.
 //! Pattern from zero2prod: base.yaml + environment override + env vars.
 
 use secrecy::Secret;

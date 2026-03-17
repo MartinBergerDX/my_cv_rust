@@ -11,6 +11,7 @@ crate-type = ["cdylib", "rlib"]
 [[bin]]
 name = "my_cv_rust"
 path = "src/main.rs"
+required-features = ["ssr"]
 
 [dependencies]
 # Leptos 0.8 (SSR + hydrate)
@@ -29,18 +30,17 @@ console_error_panic_hook = { version = "0.1", optional = true }
 # Cloudflare Workers (for deployment target; use feature "worker" to build for Workers)
 worker = { version = "0.7", optional = true }
 
-# Server-only: not built for wasm32 (avoids mio "unsupported wasm" when building hydrate bundle)
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-leptos_axum = "0.8"
-axum = "0.8"
-tokio = { version = "1", features = ["full"] }
+# Server-only dependencies (enabled by feature "ssr")
+leptos_axum = { version = "0.8", optional = true }
+axum = { version = "0.8", optional = true }
+tokio = { version = "1", features = ["full"], optional = true }
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
-secrecy = { version = "0.8", features = ["serde"] }
-config = { version = "0.14", default-features = false, features = ["yaml"] }
-dotenvy = "0.15"
-serde-aux = "4"
+tracing-subscriber = { version = "0.3", features = ["env-filter"], optional = true }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"], optional = true }
+secrecy = { version = "0.8", features = ["serde"], optional = true }
+config = { version = "0.14", default-features = false, features = ["yaml"], optional = true }
+dotenvy = { version = "0.15", optional = true }
+serde-aux = { version = "4", optional = true }
 
 # Smaller WASM in release (matches start-axum).
 [profile.wasm-release]
@@ -61,7 +61,20 @@ default = ["ssr"]
 # Used by cargo-leptos when building the lib for the browser (WASM/hydration).
 hydrate = ["leptos/hydrate", "dep:console_error_panic_hook"]
 # SSR (server-side rendering): enabled by default and for the bin (matches start-axum).
-ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr"]
+ssr = [
+  "leptos/ssr",
+  "leptos_meta/ssr",
+  "leptos_router/ssr",
+  "dep:leptos_axum",
+  "dep:axum",
+  "dep:tokio",
+  "dep:tracing-subscriber",
+  "dep:reqwest",
+  "dep:secrecy",
+  "dep:config",
+  "dep:dotenvy",
+  "dep:serde-aux",
+]
 # Enable for Cloudflare Workers build (wasm target).
 worker = ["dep:worker"]
 
