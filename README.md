@@ -21,7 +21,19 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
 
    cargo-leptos runs Tailwind and writes to `target/tmp/tailwind.css`; copy it to `target/site/pkg/my_cv_rust.css` so the app serves it. Copy the WASM so `/pkg/my_cv_rust_bg.wasm` is available. **Release build and run:** `./build-release.sh`.
 
-   (Optional) To pin a Tailwind version, set `LEPTOS_TAILWIND_VERSION` before `cargo leptos build`.
+   (Optional) To pin tool versions and suppress “newer version available” notices, set these before `cargo leptos build`:
+
+   ```bash
+   export LEPTOS_TAILWIND_VERSION=v4.2.1
+   export LEPTOS_WASM_OPT_VERSION=version_128
+   ```
+
+   If you keep them in `.env`, you can export them into your shell for the build step like this:
+
+   ```bash
+   set -a; source .env; set +a
+   cargo leptos build
+   ```
 
 2. **Run the server:**
 
@@ -43,7 +55,7 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
 - `src/pages/` — Home, blog list, blog post
 - `src/components/` — Navbar (desktop horizontal / mobile bottom “thumb zone”), ProjectGrid, ContactForm
 - `src/data/` — `ResumeData`, `project_entries()`, `blog_posts()` (SSG-style)
-- `src/server/` — `submit_contact` server function (mock; ready for email API)
+- `src/server/` — `submit_contact` server function
 - `style/main.css` — Tailwind v4 entry + custom styles
 - `posts/` — Future blog content (compile-time / SSG)
 - `public/` — Static assets (e.g. placeholder.svg for project grid)

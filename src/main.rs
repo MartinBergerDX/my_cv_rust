@@ -2,6 +2,7 @@ use axum::Router;
 use leptos::config::get_configuration as get_leptos_configuration;
 use leptos_axum::{generate_route_list, LeptosRoutes};
 use my_cv_rust::{configuration, email_client, shell, App};
+use std::net::SocketAddr;
 use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
@@ -48,6 +49,11 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     let url = format!("http://{addr}");
     tracing::info!("listening on {}", url);
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(
+        listener,
+        app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await
+    .unwrap();
     tracing::info!("Server stopped");
 }
