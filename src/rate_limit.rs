@@ -55,3 +55,47 @@ pub fn default_contact_rate_limiter() -> IpRateLimiter {
     IpRateLimiter::new(Duration::from_secs(10 * 60), 3)
 }
 
+#[cfg(all(test, feature = "ssr"))]
+mod tests {
+    use super::IpRateLimiter;
+    use std::{net::IpAddr, time::Duration};
+
+    #[test]
+    fn allows_up_to_max_requests_per_ip_within_window() {
+        let limiter = IpRateLimiter::new(Duration::from_secs(60), 3);
+        let ip: IpAddr = "203.0.113.10".parse().unwrap();
+
+        assert!(limiter.allow(ip));
+        assert!(limiter.allow(ip));
+        assert!(limiter.allow(ip));
+        assert!(!limiter.allow(ip));
+        assert!(!limiter.allow(ip));
+    }
+
+    #[test]
+    fn different_ips_have_independent_buckets() {
+        let limiter = IpRateLimiter::new(Duration::from_secs(60), 1);
+        let ip1: IpAddr = "203.0.113.10".parse().unwrap();
+        let ip2: IpAddr = "203.0.113.11".parse().unwrap();
+
+        assert!(limiter.allow(ip1));
+        assert!(!limiter.allow(ip1));
+
+        assert!(limiter.allow(ip2));
+        assert!(!limiter.allow(ip2));
+    }
+
+    #[test]
+    fn allows_again_after_window_expires() {
+        let limiter = IpRateLimiter::new(Duration::from_millis(20), 1);
+        let ip: IpAddr = "203.0.113.10".parse().unwrap();
+
+        assert!(limiter.allow(ip));
+        assert!(!limiter.allow(ip));
+
+        std::thread::sleep(Duration::from_millis(30));
+
+        assert!(limiter.allow(ip));
+    }
+}
+

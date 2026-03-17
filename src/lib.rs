@@ -12,6 +12,8 @@ pub mod configuration;
 #[cfg(feature = "ssr")]
 pub mod email_client;
 #[cfg(feature = "ssr")]
+pub mod http;
+#[cfg(feature = "ssr")]
 pub mod rate_limit;
 #[cfg(feature = "ssr")]
 pub mod state;

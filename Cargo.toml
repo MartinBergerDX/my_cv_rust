@@ -55,6 +55,7 @@ wiremock = "0.6"
 fake = { version = "4", features = ["derive"] }
 claims = "0.8"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+serde_qs = "0.15"
 
 [features]
 default = ["ssr"]

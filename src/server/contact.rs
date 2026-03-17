@@ -63,7 +63,7 @@ fn contact_email_text(input: &ContactFormInput) -> String {
     )
 }
 
-#[leptos::server]
+#[leptos::server(endpoint = "submit_contact")]
 pub async fn submit_contact(
     input: ContactFormInput,
 ) -> Result<ContactFormResult, ServerFnError> {
