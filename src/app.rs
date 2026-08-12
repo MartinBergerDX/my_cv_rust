@@ -8,7 +8,7 @@ use leptos_router::components::{Route, Router, Routes};
 use leptos_router::path;
 
 use crate::components::Navbar;
-use crate::pages::{BlogListPage, BlogPostPage, HomePage};
+use crate::pages::{BlogListPage, BlogPostPage, ContactPage, HomePage};
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -42,7 +42,8 @@ pub fn App() -> impl IntoView {
                     <Routes fallback=|| view! { <p class="text-gray-600">"Not found."</p> }>
                         <Route path=path!("/") view=HomePage />
                         <Route path=path!("/blog") view=BlogListPage />
-                        <Route path=path!("/blog/:id") view=BlogPostPage />
+                        <Route path=path!("/blog/:date/:slug") view=BlogPostPage />
+                        <Route path=path!("/contact") view=ContactPage />
                     </Routes>
                 </main>
             </div>

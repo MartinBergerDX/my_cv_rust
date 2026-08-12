@@ -1,11 +1,9 @@
-use crate::components::{ContactForm, ProjectGrid};
-use crate::data::{project_entries, resume_data};
+use crate::data::resume_data;
 use leptos::prelude::{ElementChild, *};
 
 #[component]
 pub fn HomePage() -> impl IntoView {
     let resume = resume_data();
-    let projects = project_entries();
 
     view! {
             <section class="py-12 md:py-16">
@@ -74,15 +72,6 @@ pub fn HomePage() -> impl IntoView {
                         </li>
                     }).collect_view()}
                 </ul>
-            </section>
-
-            <section class="py-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">"Projects"</h2>
-                <ProjectGrid projects=projects />
-            </section>
-
-            <section class="py-12">
-                <ContactForm />
             </section>
     }
 }

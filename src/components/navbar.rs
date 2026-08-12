@@ -10,8 +10,8 @@ pub fn Navbar() -> impl IntoView {
                     <a href="/" class="font-semibold text-gray-900 hover:text-gray-600">"Home"</a>
                     <ul class="flex gap-6">
                         <li><a href="/#work" class="text-gray-600 hover:text-gray-900">"Work"</a></li>
-                        <li><a href="/#projects" class="text-gray-600 hover:text-gray-900">"Projects"</a></li>
-                        <li><a href="/#contact" class="text-gray-600 hover:text-gray-900">"Contact"</a></li>
+                        <li><a href="/blog" class="text-gray-600 hover:text-gray-900">"Blog"</a></li>
+                        <li><a href="/contact" class="text-gray-600 hover:text-gray-900">"Contact"</a></li>
                     </ul>
                 </div>
             </nav>
@@ -31,12 +31,12 @@ pub fn Navbar() -> impl IntoView {
                         </a>
                     </li>
                     <li>
-                        <a href="/#projects" class="nav-mobile-link">
-                            <span class="nav-mobile-link-inner" data-icon="📁">"Projects"</span>
+                        <a href="/blog" class="nav-mobile-link">
+                            <span class="nav-mobile-link-inner" data-icon="📝">"Blog"</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/#contact" class="nav-mobile-link">
+                        <a href="/contact" class="nav-mobile-link">
                             <span class="nav-mobile-link-inner" data-icon="✉️">"Contact"</span>
                         </a>
                     </li>

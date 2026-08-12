@@ -25,7 +25,7 @@ pub fn ContactForm() -> impl IntoView {
 
     view! {
         <section id="contact" class="max-w-xl mx-auto">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">"Get in touch"</h2>
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">"Get in touch"</h1>
             <form
                 on:submit=move |ev: ev::SubmitEvent| { ev.prevent_default(); on_submit(()); }
                 class="space-y-4"

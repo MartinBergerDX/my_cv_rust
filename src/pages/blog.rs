@@ -1,30 +1,30 @@
-use crate::data::{get_post_by_slug, blog_posts, BlogPost};
+use crate::data::{blog_posts, get_post, BlogPost};
 use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
 #[component]
 fn BlogPostContent(post: Option<&'static BlogPost>) -> impl IntoView {
-    view! {
-        <article>
-            {match post {
-                Some(p) => view! {
-                    <>
-                        <h1 class="text-3xl font-bold text-gray-900">{p.title}</h1>
-                        <p class="text-gray-500 mt-2">{p.date}</p>
-                        <div class="prose prose-gray mt-6" inner_html=p.content />
-                    </>
-                }
-                .into_view(),
-                None => view! {
-                    <>
-                        <h1 class="text-3xl font-bold text-gray-900">""</h1>
-                        <p class="text-gray-500 mt-2">""</p>
-                        <div class="prose prose-gray mt-6" inner_html="<p class=\"text-gray-600\">Post not found.</p>" />
-                    </>
-                }
-                .into_view(),
-            }}
-        </article>
+    match post {
+        Some(p) => {
+            let html = p.html_content();
+            view! {
+                <article>
+                    <h1 class="text-3xl font-bold text-gray-900 leading-tight">{p.title}</h1>
+                    <time class="block text-gray-500 mt-2" datetime=p.date>{p.date}</time>
+                    <div class="blog-prose mt-8" inner_html=html />
+                </article>
+            }
+            .into_any()
+        }
+        None => view! {
+            <article>
+                <h1 class="text-3xl font-bold text-gray-900">"Post not found"</h1>
+                <p class="text-gray-600 mt-4">
+                    <a href="/blog" class="underline hover:text-gray-900">"← Back to blog"</a>
+                </p>
+            </article>
+        }
+        .into_any(),
     }
 }
 
@@ -39,14 +39,15 @@ pub fn BlogListPage() -> impl IntoView {
                 {posts
                     .iter()
                     .map(|p| {
+                        let href = p.path();
                         view! {
                             <li>
                                 <a
-                                    href=format!("/blog/{}", p.slug)
+                                    href=href
                                     class="block p-4 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition"
                                 >
                                     <h2 class="font-semibold text-gray-900">{p.title}</h2>
-                                    <p class="text-sm text-gray-500 mt-1">{p.date}</p>
+                                    <time class="block text-sm text-gray-500 mt-1" datetime=p.date>{p.date}</time>
                                     <p class="text-gray-600 mt-2">{p.excerpt}</p>
                                 </a>
                             </li>
@@ -61,11 +62,18 @@ pub fn BlogListPage() -> impl IntoView {
 #[component]
 pub fn BlogPostPage() -> impl IntoView {
     let params = use_params_map();
-    let slug = move || params.get().get("id").unwrap_or_default();
-    let post = move || get_post_by_slug(&slug());
+    let post = move || {
+        let map = params.get();
+        let date = map.get("date").unwrap_or_default();
+        let slug = map.get("slug").unwrap_or_default();
+        get_post(&date, &slug)
+    };
 
     view! {
         <div class="max-w-2xl mx-auto px-4 py-12 md:py-16">
+            <p class="mb-8">
+                <a href="/blog" class="text-sm text-gray-500 hover:text-gray-900">"← Blog"</a>
+            </p>
             {move || view! { <BlogPostContent post=post() /> }}
         </div>
     }
