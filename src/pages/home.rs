@@ -29,14 +29,23 @@ pub fn HomePage() -> impl IntoView {
                     {resume.work_history.iter().map(|w| view! {
                         <li class="border-l-2 border-gray-200 pl-4">
                             <h3 class="font-semibold text-gray-900">{w.role.clone()}</h3>
-                            <p class="text-gray-600">{w.company.clone()}
-                                <span class="text-gray-400">{if w.location.is_empty() { "".to_string() } else { format!(" · {}", w.location) }}</span>
+                            <p class="text-gray-600">
+                                {w.company.clone()}
+                                <span class="text-gray-400">
+                                    {(!w.location.is_empty()).then(|| [" · ", w.location.as_str()].concat()).unwrap_or_default()}
+                                </span>
                             </p>
                             <p class="text-sm text-gray-500">{w.start.clone()}" – "{w.end.clone()}</p>
                             <p class="mt-1 text-gray-600">{w.description.clone()}</p>
                             <ul class="mt-2 list-disc list-inside text-sm text-gray-600">
                                 {w.highlights.iter().map(|h| view! { <li>{h.clone()}</li> }).collect_view()}
                             </ul>
+                            {(!w.tech.is_empty()).then(|| view! {
+                                <p class="mt-2 text-sm text-gray-500">
+                                    <span class="font-medium text-gray-700">"Tech: "</span>
+                                    {w.tech.clone()}
+                                </p>
+                            })}
                         </li>
                     }).collect_view()}
                 </ul>

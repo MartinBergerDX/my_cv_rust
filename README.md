@@ -19,7 +19,9 @@ High-performance personal CV and portfolio site built with **Leptos 0.8** (SSR),
    cp target/site/pkg/my_cv_rust.wasm target/site/pkg/my_cv_rust_bg.wasm
    ```
 
-   cargo-leptos runs Tailwind and writes to `target/tmp/tailwind.css`; copy it to `target/site/pkg/my_cv_rust.css` so the app serves it. Copy the WASM so `/pkg/my_cv_rust_bg.wasm` is available. **Release build and run:** `./build-release.sh`.
+   cargo-leptos runs Tailwind and writes to `target/tmp/tailwind.css`; copy it to `target/site/pkg/my_cv_rust.css` so the app serves it. Copy the WASM so `/pkg/my_cv_rust_bg.wasm` is available. 
+   
+   **Release build and run:** `./build-release.sh`.
 
    (Optional) To pin tool versions and suppress “newer version available” notices, set these before `cargo leptos build`:
 
