@@ -35,7 +35,7 @@ pub fn HomePage() -> impl IntoView {
                             </p>
                             <p class="text-sm text-gray-500">{w.start.clone()}" – "{w.end.clone()}</p>
                             <p class="mt-1 text-gray-600">{w.description.clone()}</p>
-                            <ul class="mt-2 list-disc list-inside text-sm text-gray-600">
+                            <ul class="mt-2 list-disc list-inside text-base text-gray-600">
                                 {w.highlights.iter().map(|h| view! { <li>{h.clone()}</li> }).collect_view()}
                             </ul>
                             {(!w.tech.is_empty()).then(|| view! {
